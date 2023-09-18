@@ -20,7 +20,7 @@ class ProfessorMiddleware
 
             //user = 1 professor = 1 admin = 2
 
-            if (Auth::user()->role == '1') {
+            if (Auth::user()->role == '1' || Auth::user()->role == '2') {
 
                 return $next($request);
 

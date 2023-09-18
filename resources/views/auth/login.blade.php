@@ -18,6 +18,11 @@
                     @csrf
                 <h2 class="text-center text-white" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;">
                     <strong>Conecte-se</strong></h2>
+                    @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="form-group mb-3">
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" autocomplete="email" autofocus>
 

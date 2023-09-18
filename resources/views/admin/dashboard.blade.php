@@ -19,7 +19,12 @@
                     {{ Auth::user()->role }}
                 </p>
 
-                <h2 class="fw-bold">Esse é seu Histórico de Aulas</h2>
+                <h2 class="fw-bold">Este é o seu painel dashboard.</h2>
+                @if ($message = Session::get('success'))
+                                    <div class="alert alert-success">
+                                        <p>{{ $message }}</p>
+                                    </div>
+                                    @endif
             </div>
         </div>
         <div class="container">
@@ -31,7 +36,7 @@
                                 <div class="card-header py-3" style="background-color: #090716;border-radius: 25px;">
                                     <div class="row table-topper align-items-center">
                                         <div class="col-12 col-sm-5 col-md-6 text-start" style="margin: 0px;padding: 5px 15px;">
-                                            <p class="m-0 fw-bold" style="color: rgb(255,255,255);">Aulas Assistidas</p>
+                                            <p class="m-0 fw-bold" style="color: rgb(255,255,255);">Aulas A Monitorar.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -40,22 +45,55 @@
                                         <div class="table-responsive" style="border-top-style: none;">
                                             <table class="table table-striped dash">
                                                 <thead class="thead-dark">
+                                                    
                                                     <tr>
-                                                        <th class="text-center">Título da Aula</th>
+                                                        <th class="text-center">ID do Post</th>
+                                                        <th class="text-center">ID do User</th>
+                                                        <th class="text-center">Nome do usuario</th>
+                                                        <th class="text-center">Título do post</th>
                                                         <th class="text-center filter-false sorter-false">Ações</th>
+                                                        <th class="text-center filter-false sorter-false">Aprovado?</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="text-center" style="border-top-width: 0px;">
+                                                    @foreach ($posts as $post)
                                                     <tr>
-                                                        <td>Aula Teste</td>
-                                                        <td class="text-center align-middle"><a class="btn btnMaterial btn-flat primary semicircle" role="button" href="#" style="color: #00bdff;"><i class="far fa-eye"></i></a></td>
+                                                        <td>{{ $post->id }}</td>
+                                                        <td>{{ $post->user_id }}</td>
+                                                        <td>{{ $post->user->name }}</td>
+                                                        <td>{{ $post->title }}</td>
+                                                        <td class="text-center align-middle d-flex justify-content-center align-items-center">
+                                                            <a class="btn btnMaterial" href="{{ route('posts.show', $post->id) }} "style="color: #00bdff;">
+                                                                <i class="far fa-eye"></i>
+                                                            </a>
+                                                            <form action="{{ route('post.isAproved', $post->id) }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="isAproved" value="{{ $post->isAproved ? '0' : '1' }}">
+                                                                <button class="btn btnMaterial" style="color: {{ $post->isAproved ? 'red' : 'green' }}" type="submit">
+                                                                    <i class="fa-solid fa-check"></i> {{ $post->isAproved ? 'Desaprovar' : 'Aprovar' }}
+                                                                </button>
+                                                            </form>
+                                                            
+                                                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            <button class="btn btnMaterial" type="submit" style="color: red;">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </button>
+                                                            </form>
+                                                        </td>
+                                                        <td>
+                                                            @if ($post->isAproved == 0)
+                                                            <span class="badge bg-danger text-black py-2 px-3">Não</span>
+                                                            @elseif ($post->isAproved == 1)
+                                                            <span class="badge bg-success text-black py-2 px-3">Sim</span>
+                                                            @endif
+                                                        </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>Aula Teste 2</td>
-                                                        <td class="text-center align-middle"><a class="btn btnMaterial btn-flat primary semicircle" role="button" href="#" style="color: #00bdff;"><i class="far fa-eye"></i></a></td>
-                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
+                                            
                                         </div>
                                     </div>
                                 </div>

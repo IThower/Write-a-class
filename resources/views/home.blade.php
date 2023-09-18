@@ -16,6 +16,12 @@
             <div class="row g-0 flex-lg-row-reverse align-items-center g-5 py-5" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;">
                 <div class="col-10 col-sm-8 col-lg-6"><img class="img-fluid d-block mx-lg-auto" src="images/Formula-pana.svg" width="700" height="500" loading="lazy"></div>
                 <div class="col-lg-6">
+                    @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                
                     <h1 class="display-5 fw-bold lh-1 mb-3"><strong>Plataforma de Conteúdo e Ensino Compartilhado</strong></h1>
                     <h1 class="text-warning"><span style="color: var(--yellow-basic);">Comece agora, 
                         @if(Auth::check())

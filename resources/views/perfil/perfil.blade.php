@@ -25,11 +25,29 @@
                     <div class="col-md-4 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <div class="text-center d-flex flex-column align-items-center"><img class="rounded-circle" src="images/profile.jpg" alt="Admin" width="150">
+                                @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
+                                @if ($message = Session::get('success'))
+                                <div class="alert alert-success">
+                                    <p>{{ $message }}</p>
+                                </div>
+                                @endif
+                                <div class="text-center d-flex flex-column align-items-center">
+                                    <figure class="text-center">
+                                    <img class="rounded-circle" src= {{ $user->image ? asset($user->image) : asset('images/default-photo.png') }} alt="Imagem de perfil" style="max-width: 150px; max-height: 150px; width: 150px; height: 150px; object-fit: cover;">
+                                    </figure>
                                     <div class="mt-3">
                                         <h4>{{  Auth::user()->name ?? 'N/A' }}</h4>
-                                        <p class="text-primary mb-1">UI/UX Designer</p>
-                                        <p class="text-muted font-size-sm">Santos - SP, Brasil</p><button class="btn btn-warning">Ver Aulas</button><button class="btn btn-outline-primary">Mensagem</button>
+                                        <p class="text-primary mb-1">{{  Auth::user()->specialty ?? 'N/A' }}</p>
+                                        <p class="text-muted font-size-sm">{{  Auth::user()->address ?? 'N/A' }}</p><button class="btn btn-warning">Ver Aulas</button><button class="btn btn-outline-primary">Mensagem</button>
                                     </div>
                                 </div>
                             </div>
@@ -40,28 +58,29 @@
                                     <div class="col-sm-6">
                                         <h6 class="mb-0">Twitter</h6>
                                     </div>
-                                    <div class="col-sm-6 text-secondary"><span> @Alybaff </span></div>
+                                    <div class="col-sm-6 text-secondary"><span>{{ $user->social_links['twitter'] ?? 'N/A' }}</span></div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h6 class="mb-0">Linkedin</h6>
                                     </div>
-                                    <div class="col-sm-6 text-secondary"><span> Fabio Carvalho </span></div>
+                                    <div class="col-sm-6 text-secondary"><span>{{ $user->social_links['linkedin'] ?? 'N/A' }}</span></div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h6 class="mb-0">Instagram</h6>
                                     </div>
-                                    <div class="col-sm-6 text-secondary"><span> @FabioCarvalho </span></div>
+                                    <div class="col-sm-6 text-secondary"><span>{{ $user->social_links['instagram'] ?? 'N/A' }}</span></div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h6 class="mb-0">Website</h6>
                                     </div>
-                                    <div class="col-sm-6 text-secondary"><span> Meu Portfolio </span></div>
+                                    <div class="col-sm-6 text-secondary"><span>{{ $user->social_links['website'] ?? 'N/A' }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -85,19 +104,19 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Role: </h6>
+                                        <h6 class="mb-2">Role: </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <h6>
+                                        <h6 class="mb-3" style="margin-left: -5px;">
                                             @if(Auth::check())
                                                 @if(Auth::user()->role == 0)
-                                                    <p>Aluno</p>
+                                                    <span>Aluno</span>
                                                 @elseif(Auth::user()->role == 1)
-                                                    <p>Professor</p>
+                                                    <span>Professor</span>
                                                 @elseif(Auth::user()->role == 2)
-                                                    <p style="color: red;">Admin</p>
+                                                    <span style="color: red;">Admin</span>
                                                 @else
-                                                    <p>N/A</p>
+                                                    <span>N/A</span>
                                                 @endif
                                             @else
                                                 <span>N/A</span>
@@ -109,21 +128,21 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Telefone</h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary"><span> {{  Auth::user()->telefone ?? 'N/A' }} </span></div>
+                                    <div class="col-sm-9 text-secondary"><span> {{  Auth::user()->phone_number ?? 'N/A' }} </span></div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Endereço</h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary"><span> {{  Auth::user()->endereco ?? 'N/A' }} </span></div>
+                                    <div class="col-sm-9 text-secondary"><span> {{  Auth::user()->address ?? 'N/A' }} </span></div>
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-sm-12"><a class="btn btn-warning" role="button" target="" href="{{ route('editProfile') }}">Editar</a></div>
+                                    <div class="col-sm-12"><a class="btn btn-warning" role="button" target="" href="{{ route('perfil.edit') }}">Editar</a></div>
                                 </div>
                             </div>
-                        </div><span> aaa!! </span>
+                        </div>
                     </div>
                 </div>
             </div>

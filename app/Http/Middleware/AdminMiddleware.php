@@ -25,12 +25,12 @@ class AdminMiddleware
                 return $next($request);
 
             } else {
-                return redirect('/home')->with('error', 'You have not admin access');
+                return redirect('/home')->with('error', 'Você não tem acesso de adm.');
             }
 
         } else {
 
-            return redirect('/login')->with('error', 'You have not admin access');
+            return redirect('/login')->with('error', 'Você não tem acesso de adm.');
         }
 
     }

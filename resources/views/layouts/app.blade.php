@@ -107,7 +107,7 @@
                         </li>
                     </ul>
                 </div>
-                @if(Auth::check() && (Auth::user()->role == 1 || Auth::user()->role == 2))
+                @if(Auth::check())
                 <a class="btn btn-warning shadow btn-customized open-menu text-center" role="button">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="fs-4">
                 <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
@@ -115,10 +115,12 @@
                 </svg>
                 </a>
             </div>
-
                     <div class="sidebar">
                         <div class="dismiss"></div>
-                        <div class="text-center brand"><img class="rounded-circle" src="{{ asset('images/profile.jpg') }}" height="50vh" style="margin-bottom: 10px;">
+                        <div class="text-center brand">
+                            <figure class="text-center">
+                                <img class="rounded-circle" src= {{ auth::user()->image ? asset(auth::user()->image) : asset('images/default-photo.png') }} alt="Imagem de perfil" style="max-width: 150px; max-height: 150px; width: 150px; height: 150px; object-fit: cover;">
+                                </figure>
                             <h5>{{ auth::user()->name }} </h5>
                             <p style="opacity: 0.8;">{{ auth::user()->email }}</p>
                         </div>
@@ -126,7 +128,9 @@
                             <div class="row gx-0 gy-0 justify-content-center">
                                 <div class="col-12 col-md-12 offset-0 align-self-start m-auto justify-content-center" style="text-align: justify;">
                                     @if(Auth::check())
-                                    @if(Auth::user()->role == 1)
+                                    @if(Auth::user()->role == 0)
+                                        <p class="text-center">Bem vindo - Aluno</p>
+                                    @elseif(Auth::user()->role == 1)
                                         <p class="text-center">Bem vindo - Professor</p>
                                     @elseif(Auth::user()->role == 2)
                                         <p class="text-center" style="color: red;">Bem vindo - Admin</p>
@@ -145,16 +149,22 @@
                                                 <path d="M459.5 71.41l-171.5 142.9v83.45l171.5 142.9C480.1 457.7 512 443.3 512 415.1V96.03C512 68.66 480.1 54.28 459.5 71.41zM203.5 71.41L11.44 231.4c-15.25 12.87-15.25 36.37 0 49.24l192 159.1c20.63 17.12 52.51 2.749 52.51-24.62v-319.9C255.1 68.66 224.1 54.28 203.5 71.41z"></path>
                                             </svg>Últimas Aulas</a></div>
                                 </div>
-                                <div class="col-12 col-md-12 m-auto" style="text-align: justify;margin-top: 20px!important;">
-                                    <h6 class="fw-semibold" style="font-family: Poppins, sans-serif;padding-left: 20px;">Professor</h6>
-                                    <div class="btn-group-vertical" role="group"><a class="btn btn-dark" role="button" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;width: 226px;margin-left: 0px;margin-right: 0px;text-align: justify;padding-right: 20px;padding-left: 20px;margin-top: 5px;border-radius: 12px;" href="{{ route('newClass') }}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="fs-5 text-start" style="padding-right: 0px;padding-left: 0px;margin-right: 10px;">
-                                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
-                                                <path d="M464 96h-192l-64-64h-160C21.5 32 0 53.5 0 80v352C0 458.5 21.5 480 48 480h416c26.5 0 48-21.5 48-48v-288C512 117.5 490.5 96 464 96zM336 311.1h-56v56C279.1 381.3 269.3 392 256 392c-13.27 0-23.1-10.74-23.1-23.1V311.1H175.1C162.7 311.1 152 301.3 152 288c0-13.26 10.74-23.1 23.1-23.1h56V207.1C232 194.7 242.7 184 256 184s23.1 10.74 23.1 23.1V264h56C349.3 264 360 274.7 360 288S349.3 311.1 336 311.1z"></path>
-                                            </svg>Criar Aula</a><a class="btn btn-dark" role="button" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;width: 226px;margin-left: 0px;margin-right: 0px;text-align: justify;padding-right: 20px;padding-left: 20px;margin-top: 10px;border-radius: 12px;margin-bottom: 10px;" href="my-classes.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="fs-5 text-start" style="padding-right: 0px;padding-left: 0px;margin-right: 10px;">
-                                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
-                                                <path d="M512 144v288c0 26.5-21.5 48-48 48h-416C21.5 480 0 458.5 0 432v-352C0 53.5 21.5 32 48 32h160l64 64h192C490.5 96 512 117.5 512 144z"></path>
-                                            </svg>Minhas Aulas</a></div>
+                                @if(Auth::check())
+                                    @if(Auth::user()->role == 1 || Auth::user()->role == 2)
+                                        <div class="col-12 col-md-12 m-auto" style="text-align: justify;margin-top: 20px!important;">
+                                        <h6 class="fw-semibold" style="font-family: Poppins, sans-serif;padding-left: 20px;">Professor</h6>
+                                        <div class="btn-group-vertical" role="group">
+                                            <a class="btn btn-dark" role="button" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;width: 226px;margin-left: 0px;margin-right: 0px;text-align: justify;padding-right: 20px;padding-left: 20px;margin-top: 5px;border-radius: 12px;" href="{{ route('posts.create') }}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="fs-5 text-start" style="padding-right: 0px;padding-left: 0px;margin-right: 10px;">
+                                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                        <path d="M464 96h-192l-64-64h-160C21.5 32 0 53.5 0 80v352C0 458.5 21.5 480 48 480h416c26.5 0 48-21.5 48-48v-288C512 117.5 490.5 96 464 96zM336 311.1h-56v56C279.1 381.3 269.3 392 256 392c-13.27 0-23.1-10.74-23.1-23.1V311.1H175.1C162.7 311.1 152 301.3 152 288c0-13.26 10.74-23.1 23.1-23.1h56V207.1C232 194.7 242.7 184 256 184s23.1 10.74 23.1 23.1V264h56C349.3 264 360 274.7 360 288S349.3 311.1 336 311.1z"></path>
+                                        </svg>Criar Aula</a>
+                                        <a class="btn btn-dark" role="button" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;width: 226px;margin-left: 0px;margin-right: 0px;text-align: justify;padding-right: 20px;padding-left: 20px;margin-top: 10px;border-radius: 12px;margin-bottom: 10px;" href="my-classes.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="fs-5 text-start" style="padding-right: 0px;padding-left: 0px;margin-right: 10px;">
+                                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                        <path d="M512 144v288c0 26.5-21.5 48-48 48h-416C21.5 480 0 458.5 0 432v-352C0 53.5 21.5 32 48 32h160l64 64h192C490.5 96 512 117.5 512 144z"></path>
+                                        </svg>Minhas Aulas</a></div>
                                 </div>
+                                @endif
+                                @endif
                                 <div class="col-12 col-md-12 m-auto" style="text-align: justify;margin-top: 20px!important;">
                                     <h6 class="fw-semibold" style="font-family: Poppins, sans-serif;padding-left: 20px;">Perfil</h6>
                                     <div class="btn-group-vertical" role="group"><a class="btn btn-dark" role="button" style="--bs-dark: #090716;--bs-dark-rgb: 9,7,22;width: 226px;margin-left: 0px;margin-right: 0px;text-align: justify;padding-right: 20px;padding-left: 20px;margin-top: 5px;border-radius: 12px;" href="{{ route('perfil') }}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="fs-5 text-start" style="padding-right: 0px;padding-left: 0px;margin-right: 10px;">
@@ -209,7 +219,11 @@
                         </ul>
                     </div>
                     <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
-                        <div class="fw-bold d-flex align-items-center mb-2"><img class="rounded-circle" src="{{ asset('images/logo.png') }}" height="25px"><span>&nbsp;Write a Class</span></div>
+                        <div class="fw-bold d-flex align-items-center mb-2">
+                            <img class="rounded-circle" src="{{ asset('images/logo.png') }}" height="25px">
+                            <span>&nbsp;Write a Class
+                                </span>
+                            </div>
                         <p class="text-muted">Plataforma de Ensino e de divulgação de conteúdo educativo diverso e amplo.&nbsp;</p>
                     </div>
                 </div>
